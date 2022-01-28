@@ -1,0 +1,34 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+#export PS1="\u@$(ip addr show dev eth0 | grep "inet " | cut -d" " -f6) \W\\$ "
+# User specific aliases and functions
+source /usr/share/git-core/contrib/completion/git-prompt.sh
+export PS1='\[\033[32m\]\t \u@$(cat /etc/hostname) \[\033[01;30m\][\[\033[00m\]\h\[\033[01;30m\]:\[\033[0;36m\]\w$(__git_ps1 "\[\033[00;32m\]@ \[\033[01;32m\]%s")\[\033[01;30m\]]\[\033[00m\]\n\$ '
+export PATH=$PATH:/root/.config/composer/vendor/bin/
+export PGPASSWORD="postgres"
+
+psqll() {
+    DB_NAME="${@:-practice_db_1}"
+    psql -U postgres -h db $DB_NAME
+}
+
+gitdiff() {
+    git add --all
+    git diff --cached
+}
+
+gcommit() {
+     git commit --allow-empty --no-verify -m "$@";
+}
+
+monitor_log()
+{
+    truncate -s 0 $@
+    clear
+    tail -f $@
+}

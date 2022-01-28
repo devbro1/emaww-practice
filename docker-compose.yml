@@ -1,0 +1,21 @@
+#docker-compose up -d
+#docker-compose -f "docker-compose.yml" up -d --build web
+version: "3.8"
+services:
+  main:
+    build:
+      context: .
+      dockerfile: docker/main.Dockerfile
+    environment:
+    - ENV=development
+    volumes:
+    - ./:/host_machine/:rw
+#    hostname: "mycontainer"
+    depends_on:
+    - db
+
+  db:
+    image: redis:latest
+
+#volumes:
+#  mysql_data: { driver: local }
