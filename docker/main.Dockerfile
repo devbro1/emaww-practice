@@ -2,12 +2,7 @@
 #docker build --tag test1:v1.1 .
 #make sure to delete from docker desktop before building
 
-FROM amazonlinux:2.0.20211223.0
-
-#open ports for access from host
-# EXPOSE 5432:5432
-# EXPOSE 80:80
-# EXPOSE 8000:8000
+FROM php:7.4.27-cli
 
 #change default shell from sh to bash
 SHELL ["/bin/bash", "-c"]
@@ -27,30 +22,21 @@ RUN chmod 644 /root/.ssh/known_hosts
 #change folder to /
 WORKDIR /
 
-#run commands to update packages, install php, nginx, and run respective systems
-RUN amazon-linux-extras enable nginx1=latest
-RUN amazon-linux-extras enable vim=latest
-RUN amazon-linux-extras enable epel=latest
-RUN amazon-linux-extras enable postgresql13=latest
-RUN amazon-linux-extras enable php8.0=latest
-#RUN amazon-linux-extras install epel -y
-RUN yum clean all && yum update -y && yum autoremove -y && yum clean all
-# RUN yum clean all && yum autoremove -y && yum clean all
-RUN yum -y install php \
-    wget zip unzip make rsync git vim bash-completion tar
-RUN yum install -y php-cli php-fpm php-mbstring php-xml php-json php-pdo php-pecl-zip php-pecl-redis
-
-WORKDIR /root
+RUN apt-get update && apt-get install -y wget zip unzip make rsync git vim bash-completion tar
+RUN pecl install redis-5.1.1 \
+    && docker-php-ext-enable redis
 
 
-ENV NVM_DIR /root/.nvm
-ENV NODE_VERSION 16.9.1
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
-    && . $NVM_DIR/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default \
-    && npm install -g yarn
+
+# WORKDIR /root
+# ENV NVM_DIR /root/.nvm
+# ENV NODE_VERSION 16.9.1
+# RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash \
+#     && . $NVM_DIR/nvm.sh \
+#     && nvm install $NODE_VERSION \
+#     && nvm alias default $NODE_VERSION \
+#     && nvm use default \
+#     && npm install -g yarn
 
 #php
 # RUN mkdir /run/php-fpm/
