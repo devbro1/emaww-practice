@@ -41,10 +41,10 @@ RUN pecl install redis-5.1.1 \
 #php
 # RUN mkdir /run/php-fpm/
 #RUN sed -i 's/\r$//' /root/start.sh
-RUN sed -i 's/^display_errors = Off$/display_errors = On/' /etc/php.ini
-RUN sed -i 's/^display_startup_errors = Off$/display_startup_errors = On/' /etc/php.ini
-RUN sed -i 's/^upload_max_filesize = .*$/upload_max_filesize = 20M/' /etc/php.ini
-RUN sed -i 's/^memory_limit = .*$/memory_limit = 3000M/' /etc/php.ini
+# RUN sed -i 's/^display_errors = Off$/display_errors = On/' /etc/php.ini
+# RUN sed -i 's/^display_startup_errors = Off$/display_startup_errors = On/' /etc/php.ini
+# RUN sed -i 's/^upload_max_filesize = .*$/upload_max_filesize = 20M/' /etc/php.ini
+# RUN sed -i 's/^memory_limit = .*$/memory_limit = 3000M/' /etc/php.ini
 
 WORKDIR /root/php-composer/
 RUN wget https://getcomposer.org/installer -O composer-installer.php
@@ -57,9 +57,11 @@ RUN git config --global user.name "Farzad Meow Khalafi"
 RUN git config --global core.eol lf
 RUN git config --global core.autocrlf false
 
-COPY . /root/source_code
-#COPY ./docker/git/ ./.git/
-#RUN chmod -R 777 .git/hooks/
+COPY . /usr/src/myapp
+WORKDIR /usr/src/myapp
+RUN composer i
+RUN composer require phpunit/phpunit
+RUN cat composer.json
+CMD [ "php", "./start.php" , "-v", "./config.xml" ]
+#CMD [ "./vendor/bin/phpunit", "StartTest.php"]
 
-COPY docker/init_script.sh /root/init_script.sh
-CMD ["/root/init_script.sh"]

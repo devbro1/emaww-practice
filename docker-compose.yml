@@ -8,11 +8,12 @@ services:
       dockerfile: docker/main.Dockerfile
     environment:
     - ENV=development
+    - REDIS_URL=redis
     volumes:
     - ./:/host_machine/:rw
 #    hostname: "mycontainer"
     depends_on:
-    - db
+    - redis
 
   redis:
     image: redis:latest
