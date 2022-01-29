@@ -39,7 +39,7 @@ RUN yum clean all && yum update -y && yum autoremove -y && yum clean all
 RUN yum -y install php \
     nginx postgresql\
     wget zip unzip make rsync git vim bash-completion tar
-RUN yum install -y php-cli php-fpm php-pgsql php-mbstring php-xml php-json php-pdo php-pecl-zip    
+RUN yum install -y php-cli php-fpm php-pgsql php-mbstring php-xml php-json php-pdo php-pecl-zip php-pecl-redis
 
 WORKDIR /root
 

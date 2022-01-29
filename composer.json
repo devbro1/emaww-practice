@@ -1,0 +1,12 @@
+{
+    "name": "devbro/emaww-practice",
+    "description": "work needed to be done for emaww interview",
+    "authors": [
+        {
+            "name": "Farzad Meow Khalafi",
+            "email": "farzadk@gmail.com"
+        }
+    ],
+    "require": {
+    }
+}
