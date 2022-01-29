@@ -33,13 +33,12 @@ RUN amazon-linux-extras enable vim=latest
 RUN amazon-linux-extras enable epel=latest
 RUN amazon-linux-extras enable postgresql13=latest
 RUN amazon-linux-extras enable php8.0=latest
-RUN amazon-linux-extras install epel -y
+#RUN amazon-linux-extras install epel -y
 RUN yum clean all && yum update -y && yum autoremove -y && yum clean all
 # RUN yum clean all && yum autoremove -y && yum clean all
 RUN yum -y install php \
-    nginx postgresql\
     wget zip unzip make rsync git vim bash-completion tar
-RUN yum install -y php-cli php-fpm php-pgsql php-mbstring php-xml php-json php-pdo php-pecl-zip php-pecl-redis
+RUN yum install -y php-cli php-fpm php-mbstring php-xml php-json php-pdo php-pecl-zip php-pecl-redis
 
 WORKDIR /root
 
@@ -72,10 +71,9 @@ RUN git config --global user.name "Farzad Meow Khalafi"
 RUN git config --global core.eol lf
 RUN git config --global core.autocrlf false
 
-WORKDIR /root/source_code
-COPY ./* .
-COPY ./docker/git/ ./.git/
-RUN chmod -R 777 .git/hooks/
+COPY . /root/source_code
+#COPY ./docker/git/ ./.git/
+#RUN chmod -R 777 .git/hooks/
 
 COPY docker/init_script.sh /root/init_script.sh
 CMD ["/root/init_script.sh"]
